@@ -61,7 +61,7 @@ The worker reads public HTML, cross-checks the matrix against metadata from the 
 
 ### Upgrade, uninstall and troubleshooting
 
-To upgrade, extract a new release into a persistent folder, run its installer for the same Codex home, then reopen Codex. Keep the previous release for recovery; preferences live separately from the plugin cache. Do not move the active source folder without reinstalling, because the local marketplace refers to it.
+To upgrade, first run the uninstall command below from the current installation folder to stop its worker. Extract the new release into the **same folder path**, rerun the installer for the same Codex home, then reopen Codex. Keep the previous ZIP for rollback; preferences and cache remain separate. Codex rejects a different folder for an already registered marketplace name. The installer leaves existing sources unchanged; moving a source requires deliberate source management or a separate Codex home.
 
 To stop the worker and uninstall, run this from the folder used to install:
 
