@@ -12,11 +12,13 @@ const until = async predicate => { for (let i = 0; i < 100; i++) { if (await pre
 test('30 minute production cadence, scheduled fetch, retained cache and preference persistence', async t => {
   assert.equal(REFRESH_INTERVAL_MS, 1_800_000);
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'model-radar-test-'));
-  let calls = 0, failing = false;
-  const worker = await createWorker({ directory, intervalMs: 140,
+  let calls = 0, failing = false, clock = Date.now();
+  const worker = await createWorker({ directory, intervalMs: 140, now: () => clock,
     fetcher: async () => { calls++; if (failing) throw Error('test offline'); return { data, etag: 'fixture' }; } });
   t.after(async () => { await worker.close(); await fs.rm(directory, { recursive: true, force: true }); });
   const runtime = await worker.listen();
+  await until(() => calls >= 1 && !worker.snapshot().status.refreshing);
+  clock += 140;
   await until(() => calls >= 2 && !worker.snapshot().status.refreshing);
   assert.equal((await callWorker(runtime, '/snapshot')).data.models.length, 10);
   failing = true;
