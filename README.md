@@ -25,7 +25,7 @@ This is an independent viewer. The source site's data, methodology and names rem
 
 **Requirements:** Windows, Node.js 22 or later, and a Codex desktop version supporting local plugins and MCP App conversation panels. The native CLI tested for the initial version is `0.171.0-alpha.13`; other versions and other operating systems are not verified.
 
-1. Download `codex-model-radar-plugin-1.0.0.zip` and `SHA256SUMS.txt` from the [latest release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest). Verify the ZIP with `Get-FileHash -Algorithm SHA256`, then extract it to a persistent folder.
+1. Download `codex-model-radar-plugin-1.0.1.zip` and `SHA256SUMS.txt` from the [latest release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest). Verify the ZIP with `Get-FileHash -Algorithm SHA256`, then extract it to a persistent folder.
 2. Open PowerShell in the extracted folder and run:
 
    ```powershell

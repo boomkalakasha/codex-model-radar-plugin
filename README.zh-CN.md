@@ -25,7 +25,7 @@
 
 **需要：** Windows、Node.js 22 及以上，以及支持本地插件和 MCP App 对话侧面板的 Codex 桌面版。初版实测原生 CLI 为 `0.171.0-alpha.13`；其他版本、其他操作系统尚未验证。
 
-1. 从[最新 Release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest) 下载 `codex-model-radar-plugin-1.0.0.zip` 和 `SHA256SUMS.txt`。用 `Get-FileHash -Algorithm SHA256` 核对 ZIP 后，解压到长期保留的目录。
+1. 从[最新 Release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest) 下载 `codex-model-radar-plugin-1.0.1.zip` 和 `SHA256SUMS.txt`。用 `Get-FileHash -Algorithm SHA256` 核对 ZIP 后，解压到长期保留的目录。
 2. 在解压目录打开 PowerShell，运行：
 
    ```powershell

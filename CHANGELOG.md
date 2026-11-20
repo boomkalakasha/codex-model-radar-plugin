@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.0.0 — 2026-11-20
+## 1.0.1 — 2026-11-20
+
+- Validate color input before updating state, and assign its value through the DOM property instead of HTML interpolation.
+- Make the timer/error test deterministic with an injected clock.
+- First published binary Release. The earlier v1.0.0 source tag is retained without a published binary Release.
+
+## 1.0.0 — 2026-11-20 (source candidate)
 
 - Initial public release of the Codex conversation panel and sidebar entry.
 - Independent 30-minute local refresh, validated last-good cache and manual retry.
