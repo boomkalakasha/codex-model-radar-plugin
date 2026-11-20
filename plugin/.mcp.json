@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "radar": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/dist/mcp-server.cjs"
+      ],
+      "startup_timeout_sec": 45,
+      "tool_timeout_sec": 60
+    }
+  }
+}

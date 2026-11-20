@@ -1,0 +1,15 @@
+{
+  "name": "codex-model-radar",
+  "version": "1.0.0",
+  "description": "模型雷达：Codex 对话侧面板中的智商、耗时和费用榜单，每30分钟本机更新。",
+  "author": {
+    "name": "BOOMKALAKASHA",
+    "url": "https://github.com/boomkalakasha"
+  },
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "模型雷达",
+    "shortDescription": "每30分钟更新的模型表现矩阵",
+    "brandColor": "#000000"
+  }
+}

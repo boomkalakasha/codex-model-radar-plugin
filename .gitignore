@@ -1,0 +1,11 @@
+node_modules/
+internal/
+plugin/dist/
+dist/
+.release/
+.release-*/
+*.log
+*.zip
+.env
+runtime/
+打开模型雷达.url

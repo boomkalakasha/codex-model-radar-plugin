@@ -1,0 +1,28 @@
+schemaVersion: 1
+project:
+  name: codex-model-radar-plugin
+  languages: [en, zh-CN]
+target:
+  requiredFiles: [README.md, README.zh-CN.md, LICENSE, SECURITY.md]
+  readme: README.md
+  readmeZh: README.zh-CN.md
+license:
+  decision: approved
+privacy:
+  scanReachableHistory: true
+  forbiddenPatterns: []
+brand:
+  mode: full
+  profile: boomkalakasha
+git:
+  flow: github-flow
+  commits: conventional-commits
+release:
+  versioning: semver
+  immutable: true
+evidence:
+  requireLocal: true
+  requirePublicHost: true
+integrations:
+  gitleaks: required
+  reuse: required

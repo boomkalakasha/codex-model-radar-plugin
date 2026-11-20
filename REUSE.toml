@@ -1,0 +1,18 @@
+version = 1
+
+[[annotations]]
+path = ["**", ".*", ".agents/**", ".github/**", "plugin/.codex-plugin/**", "plugin/.mcp.json"]
+SPDX-FileCopyrightText = "2026 BOOMKALAKASHA"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "docs/images/model-radar-preview.png"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Project owner; third-party interface and data rights retained"
+SPDX-License-Identifier = "LicenseRef-Documentation-Screenshot"
+
+[[annotations]]
+path = "third-party/boolbase-LICENSE.txt"
+precedence = "override"
+SPDX-FileCopyrightText = "2014-2015 Felix Boehm"
+SPDX-License-Identifier = "ISC"

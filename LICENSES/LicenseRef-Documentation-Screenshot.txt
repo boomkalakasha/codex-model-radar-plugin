@@ -1,0 +1,10 @@
+Documentation screenshot notice
+
+The project owner supplied docs/images/model-radar-preview.png for public
+use in this project's documentation. It may be displayed and redistributed
+with the project documentation while retaining its context and source-data
+attribution. It is excluded from the Apache-2.0 software license grant.
+
+Third-party interface elements, logos, product names and displayed data
+retain their original rights. This notice grants no additional rights to
+those materials and implies no endorsement by their owners.

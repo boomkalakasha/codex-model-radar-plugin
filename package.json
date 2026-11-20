@@ -1,0 +1,32 @@
+{
+  "name": "codex-model-radar-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "install-local": "node scripts/install.mjs",
+    "preview": "node scripts/preview.mjs",
+    "release:package": "node scripts/package.mjs --release"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/core": "2.4.0",
+    "@modelcontextprotocol/ext-apps": "2.0.4",
+    "zod": "4.6.7",
+    "lucide": "1.77.0",
+    "cheerio": "1.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "license": "Apache-2.0",
+  "description": "Codex conversation panel for model scores, latency and cost, with a 30-minute local cache.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boomkalakasha/codex-model-radar-plugin.git"
+  },
+  "author": "BOOMKALAKASHA"
+}
