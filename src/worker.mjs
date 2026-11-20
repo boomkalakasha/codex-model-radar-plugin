@@ -73,7 +73,7 @@ export async function createWorker({ directory, fetcher = fetchPublished, interv
     }
     try {
       const route = req.url.split('?')[0];
-      if (req.method === 'GET' && route === '/status') res.end(JSON.stringify({ name: 'codex-model-radar', version: '1.0.0', ...snapshot().status }));
+      if (req.method === 'GET' && route === '/status') res.end(JSON.stringify({ name: 'codex-model-radar', version: '1.0.1', ...snapshot().status }));
       else if (req.method === 'GET' && route === '/snapshot') {
         if (!cache.data && busy) await busy;
         res.end(JSON.stringify(snapshot()));
@@ -92,7 +92,7 @@ export async function createWorker({ directory, fetcher = fetchPublished, interv
   });
   async function listen() {
     await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
-    runtime = { pid: process.pid, port: server.address().port, token, startedAt: iso(), version: '1.0.0', intervalMs };
+    runtime = { pid: process.pid, port: server.address().port, token, startedAt: iso(), version: '1.0.1', intervalMs };
     await writeJson(path.join(directory, 'runtime.json'), runtime);
     if (nextRefreshAt <= now()) refresh('startup');
     schedule();

@@ -9,7 +9,7 @@ import { callWorker, ensureWorker } from './runtime.mjs';
 const UI_URI = 'ui://codex-model-radar/panel.html';
 const title = '模型雷达';
 export async function createMcpServer({ runtime, htmlFile }) {
-  const server = new McpServer({ name: 'codex-model-radar', version: '1.0.0' });
+  const server = new McpServer({ name: 'codex-model-radar', version: '1.0.1' });
   const result = payload => ({ content: [{ type: 'text', text: payload.data ? `${payload.data.models.length} 个模型，${payload.data.configurations} 档；来源 ${payload.data.sourceUrl}` : '数据暂不可用，界面提供状态与重试。' }], structuredContent: payload });
   const read = async () => result(await callWorker(runtime, '/snapshot'));
   registerAppTool(server, 'open_radar', {

@@ -7,7 +7,7 @@ import { mountRadar } from './view.mjs';
 window.lucide = { createIcons: options => createIcons({ ...options, icons: { SquareTerminal, SquarePen, Folder, Blocks, Radar,
   RefreshCw, Sun, Moon, SlidersHorizontal, Maximize2, Minimize2, X, Palette, Rainbow, Zap,
   Clock3, ExternalLink, ChevronUp, ChevronDown, Crosshair, MousePointer2 } }) };
-const client = new App({ name: 'Model Radar', version: '1.0.0' }, { availableDisplayModes: ['inline', 'fullscreen'] }, { autoResize: true });
+const client = new App({ name: 'Model Radar', version: '1.0.1' }, { availableDisplayModes: ['inline', 'fullscreen'] }, { autoResize: true });
 let view, hostTheme, saveTimer, savePending = [], initial = false;
 const errorNode = document.getElementById('loading');
 const retryNode = document.getElementById('retry');

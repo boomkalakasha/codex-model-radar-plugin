@@ -25,7 +25,7 @@
 
 **需要：** Windows、Node.js 22 及以上，以及支持本地插件和 MCP App 对话侧面板的 Codex 桌面版。初版实测原生 CLI 为 `0.171.0-alpha.13`；其他版本、其他操作系统尚未验证。
 
-1. 从[最新 Release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest) 下载 `codex-model-radar-plugin-1.0.0.zip` 和 `SHA256SUMS.txt`。用 `Get-FileHash -Algorithm SHA256` 核对 ZIP 后，解压到长期保留的目录。
+1. 从[最新 Release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest) 下载 `codex-model-radar-plugin-1.0.1.zip` 和 `SHA256SUMS.txt`。用 `Get-FileHash -Algorithm SHA256` 核对 ZIP 后，解压到长期保留的目录。
 2. 在解压目录打开 PowerShell，运行：
 
    ```powershell
@@ -61,7 +61,7 @@
 
 ### 升级、卸载与排查
 
-升级时解压新 Release，对同一 Codex home 运行安装器，再重新打开 Codex。保留上一版用于恢复；偏好独立于插件缓存。安装源目录被本地插件市场引用，移动目录后应重新安装。
+升级前先在当前安装目录运行下方卸载命令，停止旧数据进程。将新 Release 解压到**相同目录路径**，对同一 Codex home 重新安装，再重开 Codex。保留上一版 ZIP 用于回退，偏好与缓存独立保留。Codex 会拒绝将已注册的同名插件源改指向另一目录；安装器不会自动改动已有源。迁移目录需明确管理原插件源，或使用独立 Codex home。
 
 要停止后台进程并卸载，在当初安装的目录运行：
 
