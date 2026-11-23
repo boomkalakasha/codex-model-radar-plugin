@@ -167,7 +167,17 @@ export function mountRadar(snapshot, initialPreferences, api) {
     if(action==='appearance'){if(state.mode==='neon'){status='霓虹模式固定使用深色背景；清新和彩虹可切换深浅外观。';render();return;}state.appearance=dark()?'light':'dark';}
     if(action==='refresh'){
       refreshing=true;status='正在从来源站更新…';render();
-      api.refresh().then(payload=>{refreshing=false;update(payload);status=payload.status.lastError?'更新失败，已保留上次数据':'数据已检查';render();}).catch(error=>{refreshing=false;status='更新失败：'+error.message;render();});return;
+      api.refresh().then(payload => {
+        refreshing = false;
+        update(payload);
+        const failure = payload.status.serviceError || payload.status.lastError;
+        status = failure ? '更新失败，已保留上次数据' : '数据已检查';
+        render();
+      }).catch(error => {
+        refreshing = false;
+        status = '更新失败：' + error.message;
+        render();
+      });return;
     }
     if(action)commit();
   });
@@ -197,9 +207,10 @@ export function mountRadar(snapshot, initialPreferences, api) {
     const label=app.querySelector('.rf-schedule');
     if(label&&backendStatus){
       const next=new Date(backendStatus.nextRefreshAt).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hour12:false});
-      label.textContent=backendStatus.refreshing?'正在更新…':backendStatus.lastError?'更新失败 · 保留上次数据':'每30分钟更新 · 下次 '+next;
-      label.classList.toggle('rf-update-error',!!backendStatus.lastError);
-      if(backendStatus.lastError)label.setAttribute('data-tooltip',backendStatus.lastError.message);else label.removeAttribute('data-tooltip');
+      const error=backendStatus.serviceError||backendStatus.lastError;
+      label.textContent=backendStatus.serviceError?'正在重连 · 显示缓存':backendStatus.refreshing?'正在更新…':backendStatus.lastError?'更新失败 · 保留上次数据':'每30分钟更新 · 下次 '+next;
+      label.classList.toggle('rf-update-error',!!error);
+      if(error)label.setAttribute('data-tooltip',error.message);else label.removeAttribute('data-tooltip');
     }
     const timeNode=app.querySelector('.rf-footer > span');
     if(timeNode&&backendStatus?.checkedAt){
@@ -220,5 +231,5 @@ export function mountRadar(snapshot, initialPreferences, api) {
     const link=event.target.closest('a[href]');if(!link)return;
     event.preventDefault();api.openLink(link.href).catch(error=>{status='无法打开来源：'+error.message;updateStatus();});
   });
-  return {update,setHostTheme(theme){hostTheme=theme;applyAppearance();},getPreferences(){return {schema:3,mode:state.mode,accent:state.accent,appearance:state.appearance,selected:[...state.selected],preset:state.preset,selection:state.selection};}};
+  return {update,setConnectionError(message){backendStatus={...backendStatus,serviceError:{message}};updateStatus();},setHostTheme(theme){hostTheme=theme;applyAppearance();},getPreferences(){return {schema:3,mode:state.mode,accent:state.accent,appearance:state.appearance,selected:[...state.selected],preset:state.preset,selection:state.selection};}};
 }

@@ -1,6 +1,6 @@
 {
   "name": "codex-model-radar",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "模型雷达：Codex 对话侧面板中的智商、耗时和费用榜单，每30分钟本机更新。",
   "author": {
     "name": "BOOMKALAKASHA",

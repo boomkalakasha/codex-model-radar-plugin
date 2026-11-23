@@ -6,6 +6,8 @@
 
 > **把模型表现放在对话旁边。**
 
+<!-- icarus-release-fact: dynamic -->
+
 一个 Codex 桌面端本地插件，在紧凑的对话侧面板中查看 Codex 雷达的智商、耗时、费用矩阵。选好常用模型后，无需反复打开浏览器。独立本机进程每 30 分钟检查一次数据，更新不消耗模型调用。
 
 **数据署名：数据来自 Codex 雷达 [codexradar.com](https://codexradar.com/)。💗**
@@ -25,7 +27,7 @@
 
 **需要：** Windows、Node.js 22 及以上，以及支持本地插件和 MCP App 对话侧面板的 Codex 桌面版。初版实测原生 CLI 为 `0.171.0-alpha.13`；其他版本、其他操作系统尚未验证。
 
-1. 从[最新 Release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest) 下载 `codex-model-radar-plugin-1.0.1.zip` 和 `SHA256SUMS.txt`。用 `Get-FileHash -Algorithm SHA256` 核对 ZIP 后，解压到长期保留的目录。
+1. 从[最新 Release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest) 下载带版本号的 `codex-model-radar-plugin-*.zip` 和 `SHA256SUMS.txt`。用 `Get-FileHash -Algorithm SHA256` 核对 ZIP 后，解压到长期保留的目录。
 2. 在解压目录打开 PowerShell，运行：
 
    ```powershell
@@ -56,6 +58,8 @@
 安装时会启动一个隐藏的本机数据进程。关闭面板或 MCP 连接后，它仍每 30 分钟检查一次。电脑睡眠期间无法抓取，恢复后约一分钟内检查是否到期。断网或来源结构变化时保留上次有效数据，并显示失败状态。
 
 不安装系统服务或开机任务。电脑重启后，首次加载插件会恢复后台进程。数据、偏好和最近 200 条事件保存在 `<CODEX_HOME>/model-radar`；`runtime.json` 含本机通信令牌，不应分享。
+
+从 1.0.2 起，后台退出或连接信息变化时，已打开的面板会自动重连。如果后台暂时无法启动，面板会标注正在重连，并显示上次成功获取的榜单（如有）。首次取数在后台进行，连接失败时可以点击重试。
 
 插件只读公开 HTML，将矩阵与同份页面中的发布元数据交叉校验，不执行来源页面脚本。界面通过 Codex 工具通信，脚本、样式、图标均在本机打包。来源没有保证稳定的解析接口，网页改版时插件可能需要更新。
 
@@ -90,7 +94,7 @@ npm run preview
 
 预览命令打印本机回环地址，通过沙箱 MCP 测试宿主加载相同界面，并使用真实 stdio MCP 连接和独立测试缓存；它是开发工具，不是正式插件入口。
 
-测试覆盖解析、发布数据不一致时拒绝替换缓存、定时刷新、失败保留、偏好持久化、本机 API 访问控制及 MCP UI 资源契约，测试数据为合成样例。初版还完成了主题、排名、模型排序、重试、来源跳转和窄屏的浏览器检查；截图是所有者提供的原生渲染证据，不能证明所有 Codex 版本都兼容。
+测试覆盖解析、发布数据不一致时拒绝替换缓存、定时刷新、失败保留、偏好持久化、本机 API 访问控制及 MCP UI 资源契约。恢复测试在保持同一 MCP 连接的情况下更换后台、退出后台、制造启动失败，并验证首次取数尚未结束时仍能读取状态。测试数据为合成样例。初版还完成了主题、排名、模型排序、重试、来源跳转和窄屏的浏览器检查；截图是所有者提供的原生渲染证据，不能证明所有 Codex 版本都兼容。
 
 源码导航：`src/data.mjs` 解析发布页面；`worker.mjs` 调度与缓存；`runtime.mjs` 启动和复用进程；`mcp.mjs` 声明工具和 UI；`app.mjs`、`view.mjs`、`panel.css` 渲染面板。`scripts/install.mjs` 将安装缓存绑定到目标 Node 和实例。[维护与发布说明](docs/maintenance.md)。
 
