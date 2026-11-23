@@ -6,6 +6,8 @@
 
 > **Keep model scores beside your conversation.**
 
+<!-- icarus-release-fact: dynamic -->
+
 A local Codex desktop plugin for comparing model scores, elapsed time and cost from Codex Radar. Open a compact conversation panel, pick your usual models and check the matrix without repeatedly opening a browser. A separate local process checks the source every 30 minutes; no model call is needed for updates.
 
 **数据署名：数据来自 Codex 雷达 [codexradar.com](https://codexradar.com/)。💗**
@@ -25,7 +27,7 @@ This is an independent viewer. The source site's data, methodology and names rem
 
 **Requirements:** Windows, Node.js 22 or later, and a Codex desktop version supporting local plugins and MCP App conversation panels. The native CLI tested for the initial version is `0.171.0-alpha.13`; other versions and other operating systems are not verified.
 
-1. Download `codex-model-radar-plugin-1.0.1.zip` and `SHA256SUMS.txt` from the [latest release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest). Verify the ZIP with `Get-FileHash -Algorithm SHA256`, then extract it to a persistent folder.
+1. Download the versioned `codex-model-radar-plugin-*.zip` and `SHA256SUMS.txt` from the [latest release](https://github.com/boomkalakasha/codex-model-radar-plugin/releases/latest). Verify the ZIP with `Get-FileHash -Algorithm SHA256`, then extract it to a persistent folder.
 2. Open PowerShell in the extracted folder and run:
 
    ```powershell
@@ -56,6 +58,8 @@ The owner-provided screenshot shows the plugin in the native Codex interface, wi
 The installer starts one hidden local process. It continues checking every 30 minutes after the panel or MCP connection closes. Sleep suspends networking; after resume, the worker checks whether an update is due within roughly a minute. Failed fetches or changed source markup retain the last validated snapshot.
 
 No system service or login task is installed. After a computer restart, loading the plugin starts the worker again. Data, preferences and the latest 200 events stay under `<CODEX_HOME>/model-radar`; `runtime.json` contains a private local communication token and must not be shared.
+
+Since 1.0.2, an open panel reconnects if the worker exits or changes its connection details. If the worker cannot start, the panel shows the last successful snapshot, when available, and a reconnect status. The first fetch runs in the background, and the panel offers a retry when a connection fails.
 
 The worker reads public HTML, cross-checks the matrix against metadata from the same publication and does not execute source-page scripts. The UI communicates through Codex tools; its scripts, styles and icons are bundled locally. The source has no guaranteed stable parsing contract, so site changes may require a plugin update.
 
@@ -90,7 +94,7 @@ npm run preview
 
 The preview command prints a loopback address for a sandboxed MCP test host. It uses the same bundled UI and a real stdio MCP connection, with a separate local test cache. It is a development tool, not the installed plugin entry.
 
-The tests cover parsing, mixed-publication rejection, scheduled refresh, retained cache, persisted preferences, local API access and the MCP UI resource contract. Test data is synthetic. The initial local version also passed browser checks for themes, rankings, model ordering, retry, source links and narrow layouts; the screenshot is separate owner-provided evidence of native rendering. It does not establish compatibility with every Codex version.
+The tests cover parsing, mixed-publication rejection, scheduled refresh, retained cache, persisted preferences, local API access and the MCP UI resource contract. Recovery tests keep the same MCP connection open through worker replacement, exit and a startup failure, and verify that cold snapshots remain available during a pending fetch. Test data is synthetic. The initial local version also passed browser checks for themes, rankings, model ordering, retry, source links and narrow layouts; the screenshot is separate owner-provided evidence of native rendering. It does not establish compatibility with every Codex version.
 
 Source layout: `src/data.mjs` parses the publication; `worker.mjs` schedules and caches; `runtime.mjs` starts/reuses the worker; `mcp.mjs` declares tools and UI; `app.mjs`, `view.mjs` and `panel.css` render the panel. `scripts/install.mjs` binds the installed cache to the chosen Node executable and profile. [Maintenance and release guide](docs/maintenance.md).
 

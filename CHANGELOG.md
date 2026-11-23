@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 — 2026-11-23
+
+- Reconnect existing MCP sessions when the local worker exits or rotates its port and token; start a replacement worker when needed.
+- Serve the panel resource independently of worker startup and show the last-good cache with an explicit reconnect status if the worker is unavailable.
+- Return cold-start snapshots immediately while the first source fetch continues, and expose retry controls for connection failures.
+- Add regression coverage for worker replacement, exit, cold startup, cached fallback and failed preference writes.
+
 ## 1.0.1 — 2026-11-20
 
 - Validate color input before updating state, and assign its value through the DOM property instead of HTML interpolation.

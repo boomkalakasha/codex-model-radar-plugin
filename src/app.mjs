@@ -7,8 +7,8 @@ import { mountRadar } from './view.mjs';
 window.lucide = { createIcons: options => createIcons({ ...options, icons: { SquareTerminal, SquarePen, Folder, Blocks, Radar,
   RefreshCw, Sun, Moon, SlidersHorizontal, Maximize2, Minimize2, X, Palette, Rainbow, Zap,
   Clock3, ExternalLink, ChevronUp, ChevronDown, Crosshair, MousePointer2 } }) };
-const client = new App({ name: 'Model Radar', version: '1.0.1' }, { availableDisplayModes: ['inline', 'fullscreen'] }, { autoResize: true });
-let view, hostTheme, saveTimer, savePending = [], initial = false;
+const client = new App({ name: 'Model Radar', version: '1.0.2' }, { availableDisplayModes: ['inline', 'fullscreen'] }, { autoResize: true });
+let view, hostTheme, saveTimer, savePending = [], connected = false, reading = false, pollTimer, pollDelay = 2_000;
 const errorNode = document.getElementById('loading');
 const retryNode = document.getElementById('retry');
 const normalize = data => ({ ...data, time: data.sourceSnapshotAt ? new Intl.DateTimeFormat('zh-CN', {
@@ -37,35 +37,57 @@ const api = {
   },
 };
 function accept(payload) {
+  pollDelay = !payload?.data || payload.status?.serviceError || payload.status?.refreshing ? 2_000 : 30_000;
   if (!payload?.data) {
-    if (!view) {
+    const message = payload?.status?.serviceError?.message || payload?.status?.lastError?.message;
+    if (view) view.setConnectionError(message || '正在重新连接模型雷达数据服务…');
+    else {
       errorNode.hidden = false;
-      errorNode.textContent = payload?.status?.lastError?.message ? '首次获取失败：' + payload.status.lastError.message : '正在获取榜单…';
-      retryNode.hidden = !payload?.status?.lastError;
+      errorNode.textContent = message ? '榜单暂不可用：' + message : '正在获取榜单…';
+      retryNode.hidden = !message;
     }
     return;
   }
   errorNode.hidden = true;
   retryNode.hidden = true;
-  if (!view) { view = mountRadar(normalize(payload.data), payload.preferences, api); initial = true; }
+  if (!view) view = mountRadar(normalize(payload.data), payload.preferences, api);
   view.update(payload);
+}
+function connectionError() {
+  pollDelay = 3_000;
+  const message = '连接暂时中断，正在自动重连；可点击刷新重试。';
+  if (view) view.setConnectionError(message);
+  else {
+    errorNode.hidden = false;
+    errorNode.textContent = connected ? message : '无法连接 Codex 插件服务，请重试。';
+    retryNode.hidden = false;
+  }
 }
 client.ontoolresult = result => accept(result.structuredContent);
 client.onhostcontextchanged = context => {
   if (context.theme) { hostTheme = context.theme; view?.setHostTheme(hostTheme); }
 };
 retryNode.addEventListener('click', async () => {
+  if (!connected) { window.location.reload(); return; }
   retryNode.disabled = true; errorNode.textContent = '正在重新获取榜单…';
   try { accept(await tool('refresh_radar')); }
-  catch (error) { errorNode.textContent = '获取失败：' + error.message; }
+  catch (error) { connectionError(error); }
   finally { retryNode.disabled = false; }
 });
+async function poll() {
+  if (reading) return;
+  clearTimeout(pollTimer);
+  reading = true;
+  try { accept(await tool('read_radar')); }
+  catch (error) { connectionError(error); }
+  finally { reading = false; pollTimer = setTimeout(poll, pollDelay); }
+}
 async function start() {
   await client.connect();
+  connected = true;
   hostTheme = client.getHostContext()?.theme;
   view?.setHostTheme(hostTheme);
-  setTimeout(async () => { if (!initial) { try { accept(await tool('read_radar')); } catch (error) { errorNode.textContent = error.message; } } }, 500);
-  setInterval(async () => { try { accept(await tool('read_radar')); } catch (error) { if (!view) errorNode.textContent = error.message; } }, 30_000);
-  document.addEventListener('visibilitychange', async () => { if (!document.hidden) { try { accept(await tool('read_radar')); } catch {} } });
+  pollTimer = setTimeout(poll, 500);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
 }
-start().catch(error => { errorNode.textContent = '无法连接 Codex 插件服务：' + error.message; });
+start().catch(connectionError);
